@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { APP_GUARD } from '@nestjs/core';
+// import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { UsersService } from './users/users.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { AuthGuard } from './auth/guards/auth.guard'
 
 @Module({
   imports: [
@@ -32,7 +33,11 @@ import { AuthModule } from './auth/auth.module';
       UsersModule,
       AuthModule
   ],
-  // controllers: [AppController],
-  // providers: [AppService, UsersService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    }
+  ],
 })
 export class AppModule {}
