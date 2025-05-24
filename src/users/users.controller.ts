@@ -15,9 +15,14 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { Action, AppAbility } from '../casl/casl-ability.factory/casl-ability.factory';
+import { CheckPolicies } from '../common/decorators/check-policies.decorator';
+import { PoliciesGuard } from '../common/guards/policies.guard';
+// import { AuthGuard } from '@nestjs/passport'; // This guard has changed to global level
 
 @ApiTags('users')
 @Controller('users')
+// @UseGuards(AuthGuard) // Guard being applied in the class level
 @UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
@@ -39,6 +44,8 @@ export class UsersController {
     }
 
     @Get(':id')
+    @UseGuards(PoliciesGuard)
+    @CheckPolicies((ability: AppAbility) => ability.can(Action.Read, User))
     @ApiOperation({ summary: 'get a user by id' })
     @ApiResponse({ status: 200, description: 'user got successfully', type: User })
     @ApiResponse({ status: 404, description: 'user not found' })

@@ -5,10 +5,11 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     BeforeInsert,
-    BeforeUpdate,
+    BeforeUpdate, OneToMany,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
+import {Appointment } from '../../appointments/entities/appointment.entity';
 
 export enum UserRole {
     ADMIN = 'admin',
@@ -46,6 +47,10 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @OneToMany(() => Appointment, (appointment) => appointment.doctor)
+    appointments: Appointment[];
+
 
     @BeforeInsert()
     @BeforeUpdate()

@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core';
-// import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { UsersService } from './users/users.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthGuard } from './auth/guards/auth.guard'
+import { CaslModule } from './casl/casl.module';
+import { AppointmentsModule } from './appointments/appointments.module';
 
 @Module({
   imports: [
@@ -31,7 +31,9 @@ import { AuthGuard } from './auth/guards/auth.guard'
       }),
 
       UsersModule,
-      AuthModule
+      AuthModule,
+      CaslModule,
+      AppointmentsModule
   ],
   providers: [
     {
